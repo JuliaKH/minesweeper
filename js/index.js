@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let width = 10;
     const squares = [];
     const bombsAmount = 20;
+    let isGameOver = false;
 
     function createBoard() {
         //get shuffled game array with random bombs
@@ -23,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //normal click
         grid.addEventListener('click', function(e) {
-            clickHandler(e);
+            clickHandler(e.target);
         });
 
         //add numbers
@@ -68,22 +69,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // click on square actions
-    function clickHandler(event) {
-        const square = event.target;
+    function clickHandler(square) {
         const squareWithBomb = square.classList.contains('bomb');
+        let currentId = square.id;
+
+        if (isGameOver) {
+            return;
+        }
+        if (square.classList.contains('check') || square.classList.contains('flag')) {
+            return;
+        }
 
         if (squareWithBomb) {
             console.log('Game Over');
         } else {
             const total = square.getAttribute('data');
-            if (total != 0) {
+            if (total !== '0') {
                 square.classList.add('checked');
                 square.innerHTML = total;
                 return;
             }
+            checkSquare(square, currentId);
         }
+        square.classList.add('checked');
     }
 
+
+    // check neighboring squares once square is clicked
+    function checkSquare (square, currentId) {
+        const isLeftEdge = (currentId % width) === 0;
+        const isRightEdge = (currentId % width) === width - 1;
+
+        setTimeout(() => {
+            if (currentId > 0 && !isLeftEdge) {
+                const newId = squares[parseInt(currentId) - 1].id;
+                const newSquare = document.getElementById(newId);
+                clickHandler(newSquare, newId);
+            }
+        }, 10)
+    }
 });
 
 
