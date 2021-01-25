@@ -37,36 +37,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (i > 0 && !isLeftEdge && squares[i - 1].classList.contains('bomb')) { //left square
                     totalBombs++;
                 }
-                if (i > 9 && !isRightEdge && squares[i + 1 - width].classList.contains('bomb')) {  //right-top
-                    totalBombs++;
-                }
                 if (i > 9 && squares[i - width].classList.contains('bomb')) { //top
                     totalBombs++;
                 }
-                if (i > 10 && !isLeftEdge && squares[i - 1 - width].classList.contains('bomb')) { //left-top
+                if (i > 9 && !isRightEdge && squares[i + 1 - width].classList.contains('bomb')) {  //top-right
+                    totalBombs++;
+                }
+                if (i > 10 && !isLeftEdge && squares[i - 1 - width].classList.contains('bomb')) { //top-left
                     totalBombs++;
                 }
                 if (i < 99 && !isRightEdge && squares[i + 1].classList.contains('bomb')) { //right
                     totalBombs++;
                 }
-                if (i < 90 && !isLeftEdge && squares[i - 1 + width].classList.contains('bomb')) { // left-bottom
-                    totalBombs++;
-                }
-                if (i < 89 && !isRightEdge && squares[i + 1 + width].classList.contains('bomb')) { //right-bottom
-                    totalBombs++;
-                }
                 if (i < 90 && squares[i + width].classList.contains('bomb')) { //bottom
                     totalBombs++;
                 }
+                if (i < 89 && !isRightEdge && squares[i + 1 + width].classList.contains('bomb')) { //bottom-right
+                    totalBombs++;
+                }
+                if (i < 90 && !isLeftEdge && squares[i - 1 + width].classList.contains('bomb')) { // bottom-left
+                    totalBombs++;
+                }
+
                 squares[i].setAttribute('data', totalBombs);
             }
         }
-        console.log(squares);
-
     };
 
     createBoard();
-
 
     // click on square actions
     function clickHandler(square) {
@@ -76,24 +74,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isGameOver) {
             return;
         }
-        if (square.classList.contains('check') || square.classList.contains('flag')) {
+        if (square.classList.contains('checked') || square.classList.contains('flag')) {
             return;
         }
 
         if (squareWithBomb) {
-            console.log('Game Over');
+            gameOver(square);
         } else {
             const total = square.getAttribute('data');
             if (total !== '0') {
                 square.classList.add('checked');
                 square.innerHTML = total;
                 return;
-            }
+            } 
+
             checkSquare(square, currentId);
+            
         }
         square.classList.add('checked');
     }
-
 
     // check neighboring squares once square is clicked
     function checkSquare (square, currentId) {
@@ -102,11 +101,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
             if (currentId > 0 && !isLeftEdge) {
-                const newId = squares[parseInt(currentId) - 1].id;
+                const newId = squares[parseInt(currentId) - 1].id;  //left
                 const newSquare = document.getElementById(newId);
                 clickHandler(newSquare, newId);
             }
+
+            if (currentId > 10) {
+                const newId = squares[parseInt(currentId) - width].id; //top
+                const newSquare = document.getElementById(newId);
+                clickHandler(newSquare, newId);
+            }
+
+            if (currentId > 9 && !isRightEdge) {
+                const newId = squares[parseInt(currentId) + 1 - width].id; //top-right
+                const newSquare = document.getElementById(newId);
+                clickHandler(newSquare, newId);
+            }
+            
+            
+            if (currentId > 10 && !isLeftEdge) {
+                const newId = squares[parseInt(currentId) - 1 - width].id; //top-left
+                const newSquare = document.getElementById(newId);
+                clickHandler(newSquare, newId);
+            }
+
+            if (currentId < 99 && !isRightEdge) {
+                const newId = squares[parseInt(currentId) + 1].id; //right
+                const newSquare = document.getElementById(newId);
+                clickHandler(newSquare, newId);
+            }
+        
+            if (currentId < 90) {
+                const newId = squares[parseInt(currentId) + width].id; //bottom
+                const newSquare = document.getElementById(newId);
+                clickHandler(newSquare, newId);
+            }
+            
+            if (currentId < 89 && !isRightEdge) {
+                const newId = squares[parseInt(currentId) + 1 + width].id; //bottom-right
+                const newSquare = document.getElementById(newId);
+                clickHandler(newSquare, newId);
+            }
+
+            if (currentId < 90 && !isLeftEdge) {
+                const newId = squares[parseInt(currentId) - 1 + width].id; //bottom-left
+                const newSquare = document.getElementById(newId);
+                clickHandler(newSquare, newId);
+            }
+
         }, 10)
+    }
+
+    //game over
+    function gameOver(square) {
+        isGameOver = true;
+
+        // show all the bombs
+        squares.forEach((square) => {
+            if(square.classList.contains('bomb')) {
+                square.innerHTML = '💣';
+            }
+        })
+
     }
 });
 
