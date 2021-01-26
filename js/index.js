@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('.grid');
+    const restartButton = document.querySelector('.restart-button');
     let width = 10;
-    const squares = [];
+    let squares = [];
     const bombsAmount = 20;
     let flags = 0;
     let isGameOver = false;
@@ -19,14 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const square = document.createElement('div');
             square.setAttribute('id' , i);
             square.classList.add(shuffledArray[i]);
+            square.classList.add('cell');
             grid.appendChild(square);
             squares.push(square);
         }
-
-        //normal click
-        grid.addEventListener('click', function(e) {
-            clickHandler(e.target);
-        });
 
         //add numbers
         for (let i = 0; i < squares.length; i++) {
@@ -113,12 +110,29 @@ document.addEventListener('DOMContentLoaded', () => {
         square.classList.add('checked');
     }
 
+    //normal click
+    grid.addEventListener('click', function(e) {
+        clickHandler(e.target);
+    });
+
     //ctrl and right click
     grid.addEventListener('contextmenu', function(e) {
         e.preventDefault();
         addFlag(e.target);
     });
 
+    //restart button event listener
+    restartButton.addEventListener('click', function () {
+        const cells = document.querySelectorAll('.grid div');
+        for(let i = 0; i < cells.length; i++) {
+            cells[i].remove()
+        }
+
+        squares = [];
+        flags = 0;
+        isGameOver = false;
+        createBoard();
+    });
 
     // check neighboring squares once square is clicked
     function checkSquare (square, currentId) {
@@ -186,6 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
         squares.forEach((square) => {
             if(square.classList.contains('bomb')) {
                 square.innerHTML = '💣';
+                square.classList.add('opened');
             }
         });
     }
