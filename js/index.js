@@ -101,6 +101,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (total !== '0') {
                 square.classList.add('checked');
                 square.innerHTML = total;
+
+                total === '1' && square.classList.add('blue');
+                total === '2' && square.classList.add('green');
+                total === '3' && square.classList.add('red');
+                total === '4' && square.classList.add('pink');
+                total === '5' && square.classList.add('purpure');
                 return;
             } 
 
