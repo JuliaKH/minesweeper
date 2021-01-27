@@ -1,7 +1,6 @@
 .game {
-    width: 400px;
+    max-width: 400px;
     margin: 0 auto;
-    /*display: flex;*/
 }
 
 .scoreboard {
@@ -13,30 +12,50 @@
     height: 400px;
     display: flex;
     flex-wrap: wrap;
-    background-color: grey;
-
+    background: linear-gradient(90deg, rgba(156,162,201,1) 0%, rgba(172,182,184,1) 0%, rgba(177,189,209,1) 100%);
 }
 
 .grid .cell {
     height: 32px;
-    width: 32px;
+    /* width: 32px; */
 
-    /*background: #c0c0c0;*/
-    background: #ffbe12;
-    /*background-color: grey;*/
-    border: 4px solid  #fdf2d6;
-    border-right-color: #808080;
-    border-bottom-color: #808080;
+    /* background:  #6a6a67; */
+    border: 4px solid #ece8ee;
+    border-right-color: #192637;
+    border-bottom-color: #192637;
     cursor: pointer;
-}
 
-.grid .bomb {
-    /*background-color: orange;*/
+    font-size: 30px;
+    font-family: Verdana;
+    font-weight: 800;
+    text-align: center;
+    line-height: 40px;
+    flex-basis: 32px;
+    flex-shrink: 1;
 }
 
 .grid .checked, .grid .opened {
-    background: burlywood;
     border: 1px solid  grey;
     height: 38px;
     width: 38px;
+}
+
+.blue {
+    color: #2b66f7;
+}
+
+.green {
+    color: #1dbd10;
+}
+
+.red {
+    color: #e5300b;
+}
+
+.pink {
+    color: #e50bd1;
+}
+
+.purpure { 
+    color: #b045e5;
 }
